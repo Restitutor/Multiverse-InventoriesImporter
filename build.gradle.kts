@@ -48,6 +48,7 @@ dependencies {
     runtimeOnly(project(":playerdata_1_18_2", configuration = "reobf"))
     runtimeOnly(project(":playerdata_1_20_2", configuration = "reobf"))
     runtimeOnly(project(":playerdata_1_21_4", configuration = "reobf"))
+    runtimeOnly(project(":playerdata_1_21_5", configuration = "reobf"))
     runtimeOnly(project(":playerdata_1_21_10"))
 
     // hk2 annotations
