@@ -6,6 +6,7 @@ rootProject.name = "Multiverse-InventoriesImporter"
 
 include("playerdata")
 include("playerdata_1_21_10")
+include("playerdata_1_21_5")
 include("playerdata_1_21_4")
 include("playerdata_1_20_2")
 include("playerdata_1_18_2")
