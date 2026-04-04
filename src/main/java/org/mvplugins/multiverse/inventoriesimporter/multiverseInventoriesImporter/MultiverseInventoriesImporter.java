@@ -1,5 +1,6 @@
 package org.mvplugins.multiverse.inventoriesimporter.multiverseInventoriesImporter;
 
+import org.bukkit.Bukkit;
 import org.jvnet.hk2.annotations.Service;
 import org.mvplugins.multiverse.core.command.MVCommandManager;
 import org.mvplugins.multiverse.core.inject.PluginServiceLocator;
@@ -13,6 +14,10 @@ import org.mvplugins.multiverse.inventories.dataimport.DataImportManager;
 import org.mvplugins.multiverse.inventories.dataimport.DataImporter;
 import org.mvplugins.multiverse.inventories.utils.InvLogging;
 import org.mvplugins.multiverse.inventoriesimporter.multiverseInventoriesImporter.commands.MVInvImporterCommand;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 
 @Service
 public final class MultiverseInventoriesImporter extends MultiverseModule {
@@ -38,6 +43,18 @@ public final class MultiverseInventoriesImporter extends MultiverseModule {
                         .filter(child -> child.getClass().getName().equals("org.mvplugins.multiverse.inventories.commands.PlayerDataImportCommand"))
                         .findAny())
                 .ifPresent(child -> mvcCommandManager.get().unregisterCommand(child));
+
+        mvcCommandManager.get().getCommandCompletions().registerAsyncCompletion("worldswithplayerdata", context -> {
+            File[] listFiles = Bukkit.getWorldContainer().listFiles(File::isDirectory);
+            if (listFiles == null) {
+                return Collections.emptyList();
+            }
+            return Arrays.stream(listFiles)
+                        .filter(worldFile -> new File(worldFile, "playerdata").isDirectory()
+                                || new File(worldFile, "players/data").isDirectory())
+                        .map(File::getName)
+                        .toList();
+        });
 
         registerCommands(MVInvImporterCommand.class);
         serviceLocator.getAllServices(DataImporter.class)
