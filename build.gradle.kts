@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.mvplugins.multiverse.inventoriesimporter"
-version = "1.0.3"
+version = "1.0.4"
 description = "Multiverse-InventoriesImporter"
 
 repositories {
