@@ -1,6 +1,5 @@
 package org.mvplugins.multiverse.inventoriesimporter.multiverseInventoriesImporter.migrate.perworldinventory;
 
-import com.dumptruckman.bukkit.configuration.util.SerializationHelper;
 import me.ebonjaeger.perworldinventory.Group;
 import me.ebonjaeger.perworldinventory.GroupManager;
 import me.ebonjaeger.perworldinventory.api.PerWorldInventoryAPI;
@@ -36,6 +35,7 @@ import org.mvplugins.multiverse.inventories.share.Sharables;
 import org.mvplugins.multiverse.inventories.util.FutureNow;
 import org.mvplugins.multiverse.inventories.util.PlayerStats;
 import org.mvplugins.multiverse.inventories.utils.InvLogging;
+import org.mvplugins.multiverse.inventories.utils.configuration.util.SerializationHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,7 +45,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -63,7 +62,6 @@ final class PwiImportHelper {
     private FlatFile pwiFlatFile;
     private File dataDirectory;
     private Method getFileMethod;
-    private Method deserializeMethod;
 
     private List<OfflinePlayer> playerList;
 
@@ -105,7 +103,6 @@ final class PwiImportHelper {
         this.pwiFlatFile = ReflectHelper.getFieldValue(pwiProfileManager, "dataSource", FlatFile.class);
         this.getFileMethod = ReflectHelper.getMethod(this.pwiFlatFile, "getFile", ProfileKey.class);
         this.dataDirectory = ReflectHelper.getFieldValue(this.pwiFlatFile, "dataDirectory", File.class);
-        this.deserializeMethod = ReflectHelper.getMethod(SerializationHelper.class, "deserialize", Map.class, boolean.class);
     }
 
     /**
@@ -243,7 +240,7 @@ final class PwiImportHelper {
             JSONParser parser = new JSONParser(JSONParser.USE_INTEGER_STORAGE);
             JSONObject jsonObject = (JSONObject) parser.parse(new FileInputStream(pwiPlayerDataFile));
             if (jsonObject.containsKey("==")) {
-                pwiPlayerProfile = ReflectHelper.invokeMethod(null, deserializeMethod, jsonObject, true);
+                pwiPlayerProfile = (me.ebonjaeger.perworldinventory.data.PlayerProfile) SerializationHelper.deserialize(jsonObject, true);
             } else {
                 // Use legacy serialization that doesn't use ConfigurationSerializable
                 pwiPlayerProfile = PlayerSerializer.INSTANCE.deserialize(
