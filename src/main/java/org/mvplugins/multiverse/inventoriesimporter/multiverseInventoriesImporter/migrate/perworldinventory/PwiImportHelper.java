@@ -334,7 +334,7 @@ final class PwiImportHelper {
             mvPlayerProfile.set(Sharables.REMAINING_AIR, pwiPlayerProfile.getRemainingAir());
         }
         if (pwiSettings.getProperty(PlayerSettings.LOAD_SATURATION)) {
-            mvPlayerProfile.set(Sharables.REMAINING_AIR, pwiPlayerProfile.getRemainingAir());
+            mvPlayerProfile.set(Sharables.SATURATION, pwiPlayerProfile.getSaturation());
         }
         // if (pwiSettings.getProperty(PlayerSettings.LOAD_DISPLAY_NAME)) {
         //     mvPlayerProfile.set(Sharables, pwiPlayerProfile.getDisplayName());
